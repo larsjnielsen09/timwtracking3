@@ -54,72 +54,67 @@ class _UpdatePageState extends State<UpdatePage> {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            // Your form fields here, pre-filled with user data
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: [
+              // Your form fields here, pre-filled with user data
 
-            TextFormField(
-              controller: _kundeController,
-              // validation logic here
-            ),
+              TextFormField(
+                controller: _kundeController,
+                // validation logic here
+              ),
 
-            /* TextFormField(
-              controller: _datoController,
-              // validation logic here
-            ), */
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Dato'),
+                onSaved: (value) {
+                  if (value != null) {
+                    dato = DateTime.parse(value);
+                  }
+                },
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'Please enter a date';
+                  }
+                  return null;
+                },
+                onTap: () {
+                  _selectDate(context); // Call the date picker function
+                },
+                readOnly:
+                    true, // This ensures the keyboard does not appear when you tap the field
+                controller: _datoController,
+              ),
 
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Dato'),
-              onSaved: (value) {
-                if (value != null) {
-                  dato = DateTime.parse(value);
-                }
-              },
-              validator: (value) {
-                if (value?.isEmpty ?? true) {
-                  return 'Please enter a date';
-                }
-                return null;
-              },
-              onTap: () {
-                _selectDate(context); // Call the date picker function
-              },
-              readOnly:
-                  true, // This ensures the keyboard does not appear when you tap the field
-              controller: _datoController,
-              /* (
-                    text: selectedDate
-                        .toLocal()
-                        .toString()
-                        .split(' ')[0] // Display the selected date
-                    ), */
-            ),
+              TextFormField(
+                controller: _timerController,
+                keyboardType: TextInputType.number,
+              ),
 
-            TextFormField(
-              controller: _timerController,
-              keyboardType: TextInputType.number,
-            ),
+              TextFormField(
+                controller: _beskrivelseController,
+                // validation logic here
+              ),
 
-            TextFormField(
-              controller: _beskrivelseController,
-              // validation logic here
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  await UpdateData().updateKunde({
-                    'id': widget.task['id'],
-                    'kunde': _kundeController.text,
-                    'dato': _datoController.text,
-                    'timer': _timerController.text,
-                    'beskrivelse': _beskrivelseController.text,
-                  });
-                  Navigator.pop(context, 'updated');
-                }
-              },
-              child: const Text("Opdater"),
-            ),
-          ],
+              const Spacer(),
+
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    await UpdateData().updateKunde({
+                      'id': widget.task['id'],
+                      'kunde': _kundeController.text,
+                      'dato': _datoController.text,
+                      'timer': _timerController.text,
+                      'beskrivelse': _beskrivelseController.text,
+                    });
+                    Navigator.pop(context, 'updated');
+                  }
+                },
+                child: const Text("Opdater"),
+              ),
+            ],
+          ),
         ),
       ),
     );

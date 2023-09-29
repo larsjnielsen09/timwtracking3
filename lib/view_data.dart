@@ -64,12 +64,40 @@ class _ViewDataState extends State<ViewData> {
                       IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
-                          await DeleteData().deleteKunde(task['id']);
-                          setState(() {
-                            futureTasks = FetchData().fetchAllTasks();
-                          });
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Confirm Deletion'),
+                                content: const Text(
+                                    'Are you sure you want to delete this record?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      await DeleteData().deleteKunde(
+                                          task['id']); // Your delete logic here
+                                      setState(() {
+                                        futureTasks = FetchData()
+                                            .fetchAllTasks(); // Refresh the list
+                                      });
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: const Text('Delete'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
-                      ),
+                      )
                     ],
                   ),
                 );
